@@ -2,10 +2,12 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import DisplayBoard from "../components/DisplayBoard";
 import Container from 'react-bootstrap/Container';
 import Footer from '../components/Footer';
+import MainNavBar from "../components/NavBar";
 
 const Shop = () => {
     return (
         <div style={{width: "100%"}}>
+            <MainNavBar />
             <Container fluid>
                 <div style={{marginTop: "4%"}}>
                     <DisplayBoard /> 
