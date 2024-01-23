@@ -24,7 +24,7 @@ const DisplayBoard = () => {
                 </div>
             </div>
             <Row className="gy-4" style={{marginTop: "10px", borderTop: "2px solid grey"}}>
-                <Col xxl={3} xl={6} lg={6} md={6} sm={12} style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                <Col xxl={3} xl={6} lg={6} md={6} sm={12} className='hover-shadow' style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                     <ItemCard image="rem.jpg"/>
                 </Col>
                 <Col xxl={3} xl={6} lg={6} md={6} sm={12} style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
