@@ -6,9 +6,11 @@ import Home from "../components/Home";
 
 const Shop = () => {
     return (
-        <div style={{width: "100%"}}>
+        <div style={{width: "100%", height: "100%"}}>
             <MainNavBar />
-            <Home />
+            <div style={{height: "100%", marginTop: "3%"}}>
+                <Home />
+            </div>
             <div style={{width: "100%", textAlign: "center", background:"#333333", paddingTop: "1%", marginTop: "4%", paddingBottom: "2%"}}>
                 <Container>
                     <Footer />

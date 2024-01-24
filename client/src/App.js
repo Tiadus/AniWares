@@ -4,7 +4,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   return (
-    <Shop/>
+    <div style={{width: "100%", height: "100%"}}>
+      <Shop/>
+    </div>
   );
 }
 
