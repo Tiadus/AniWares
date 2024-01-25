@@ -120,17 +120,17 @@ app.get('/item', function(req,res) {
     let statusValue = "";
     
     if (req.query) {
-        let search = `%${req.query.search}%`
-        let brandValue = req.query.brandValue;
-        let categoryValue = req.query.categoryValue;
-        let typeValue = req.query.typeValue;
-        let scaleValue = req.query.scaleValue;
-        let seriesValue = req.query.seriesValue;
-        let nameValue = req.query.nameValue;
-        let minPriceValue = req.query.minPriceValue;
-        let maxPriceValue = req.query.maxPriceValue;
-        let discountValue = req.query.discountValue;
-        let statusValue = req.query.statusValue;
+        search = `%${req.query.search}%`
+        brandValue = req.query.brandValue;
+        categoryValue = req.query.categoryValue;
+        typeValue = req.query.typeValue;
+        scaleValue = req.query.scaleValue;
+        seriesValue = req.query.seriesValue;
+        nameValue = req.query.nameValue;
+        minPriceValue = req.query.minPriceValue;
+        maxPriceValue = req.query.maxPriceValue;
+        discountValue = req.query.discountValue; 
+        statusValue = req.query.statusValue;
     }
 
     let databaseResult = 
