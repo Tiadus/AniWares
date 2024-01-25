@@ -1,9 +1,10 @@
-<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>60</x><y>30</y><w>210</w><h>180</h></coordinates><panel_attributes>Item
+<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>60</x><y>30</y><w>210</w><h>210</h></coordinates><panel_attributes>Item
 --
 itemCode                                       ID0
 itemBrand
 itemCategory
 itemType
+itemScale
 itemSeries
 itemName
 itemImage
