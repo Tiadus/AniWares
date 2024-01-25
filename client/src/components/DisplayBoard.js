@@ -7,7 +7,7 @@ const DisplayBoard = (props) => {
     const deployItems = () => {
         let displayItems = props.items.map(item => {
             return (
-                <Col key={item.itemCode} style={{display: 'flex', alignItems: 'center', justifyContent: 'center', height: "70vh"}}>
+                <Col md={12} sm={9} key={item.itemCode}>
                     <ItemCard image="images/rem.jpg" item={item}/>
                 </Col>
             )
@@ -16,7 +16,7 @@ const DisplayBoard = (props) => {
     }
 
     return (
-        <Row xxl={4} xl={4} lg={2} md={2} sm={2} className="gy-4" style={{borderTop: "2px solid grey"}}>
+        <Row xxl={4} xl={4} lg={2} md={1} sm={1} className="gy-4" style={{borderTop: "2px solid grey", display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
             {deployItems()}
         </Row>
     );

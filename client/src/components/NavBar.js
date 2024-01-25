@@ -8,7 +8,7 @@ import Offcanvas from 'react-bootstrap/Offcanvas';
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function MainNavBar() {
-  let expand = "md";
+  let expand = "lg";
   return (
     <>
         <Navbar expand={expand} className="mb-3" style={{backgroundColor: "#d3d3d3"}}>

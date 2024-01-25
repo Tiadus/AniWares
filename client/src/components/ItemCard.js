@@ -7,7 +7,7 @@ function ItemCard({item}) {
     return (
       <Card className='itemCard'>
           <div className='cardImageContainer'>
-              <Card.Img variant="top" src={item.itemImage} style={{width: "100%", height: "100%"}}/>
+              <Card.Img variant="top" src={item.itemImage} style={{width: "100%", height: "100%", objectFit: "scale-down"}}/>
           </div>
           <Card.Body className='cardBody'>
               <div>

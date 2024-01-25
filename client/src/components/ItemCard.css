@@ -1,6 +1,6 @@
 .itemCard {
     width: 100%;
-    height: 100%;
+    height: 70vh;
     transition: box-shadow 0.3s;
 }
 
@@ -12,7 +12,7 @@
     display: flex;
     align-items: center;
     justify-content: 'center';
-    height: 60%;
+    height: 45vh;
 }
 
 .cardBody {
@@ -23,31 +23,37 @@
 
 .itemName {
     text-align: center;
-    height: 90px;
+    height: 9vh;
+    width: 100%;
     overflow: hidden;
-    font-size: 1.5em;
+    font-size: 2.5vh;
+    text-overflow: hidden;
 }
 
 .itemPrice {
     text-align: center;
-    height: 50px;
-    font-size: 2.5em;
+    background-color: bisque;
+    height: 4vh;
+    font-size: 3.8vh;
 }
 
 .itemButtonContainer {
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 5vh;
+    width: 100%;
 }
 
 .itemButton {
     background-color: #7CFC00;
     background-image: linear-gradient(to bottom right, #7CFC00, cyan);
-    height: 50px;
-    width: 200px;
+    height: 100%;
+    width: 70%;
     font-family: Poppins;
     color: black;
     transition: background-image 10s ease-in;
+    font-size: 2vh;
 }
 
 .itemButton:hover {
