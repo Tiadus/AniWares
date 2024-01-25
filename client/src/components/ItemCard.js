@@ -2,16 +2,24 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import "./ItemCard.css";
 
-function ItemCard(props) {
+function ItemCard({item}) {
+    console.log(item.itemDiscount);
     return (
       <Card className='itemCard'>
           <div className='cardImageContainer'>
-              <Card.Img variant="top" src={props.image}/>
+              <Card.Img variant="top" src={item.itemImage} style={{width: "100%", height: "100%"}}/>
           </div>
           <Card.Body className='cardBody'>
               <div>
-                <Card.Title className='itemName'>S.H.Figuarts Frieren "Frieren: Beyond Journey's End"</Card.Title>
-                <Card.Title className='itemPrice'>Now $100</Card.Title>
+                <Card.Title className='itemName'>
+                  {item.itemType}
+                  {item.itemScale === "" ? " " : " " +  item.itemScale + " "} 
+                  {item.itemSeries} {item.itemName}
+                </Card.Title>
+                <Card.Title className='itemPrice'>
+                  {item.itemDiscount > 0 ? "NOW $" : "$"}
+                  {parseFloat((item.itemPrice - (item.itemPrice * item.itemDiscount)).toFixed(2))}
+                </Card.Title>
                 <div className='itemButtonContainer'>
                     <Button className='itemButton' variant="outline-succcess">ADD TO CART</Button>
                 </div>

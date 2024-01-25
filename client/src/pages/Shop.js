@@ -3,13 +3,23 @@ import Container from 'react-bootstrap/Container';
 import Footer from '../components/Footer';
 import MainNavBar from "../components/NavBar";
 import Home from "../components/Home";
+import { useState, useEffect } from "react";
 
 const Shop = () => {
+    const [shopController, setShopController] = useState(
+        {
+            home: true,
+            search: false,
+            cart: false,
+            account: false
+        }
+    );
+
     return (
         <div style={{width: "100%", height: "100%"}}>
             <MainNavBar />
             <div style={{height: "100%", marginTop: "3%"}}>
-                <Home />
+                {shopController.home === true && <Home />}
             </div>
             <div style={{width: "100%", textAlign: "center", background:"#333333", paddingTop: "1%", marginTop: "4%", paddingBottom: "2%"}}>
                 <Container>
