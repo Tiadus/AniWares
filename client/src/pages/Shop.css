@@ -1,0 +1,19 @@
+.captionHolder {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.caption {
+    border-bottom: 3px solid #7CFC00;
+    text-align: center;
+    align-items: center;
+    font-size: 3em;
+    color: #d95f76;
+    border-top: 3px solid #41980a;
+}
+
+.boardHolder {
+    margin-top: 4%;
+}
