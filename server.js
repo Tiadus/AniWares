@@ -26,16 +26,19 @@ const pool = mysql.createPool({
     queueLimit: 0
   });
 
-const queryItemPromise = (search, itemBrand, itemCategory, itemType, itemScale, itemSeries, itemName, minPrice, maxPrice, discount, status) => {
+const queryItemPromise = (search, itemBrand, itemCategory, itemType, itemScale, itemSeries, itemName, minPrice, maxPrice, discount, status, group) => {
     return new Promise(function(resolve,reject) {
         let sql = `SELECT * FROM ITEM `;
+        if (group !== "") {
+            sql = `SELECT ${group}, COUNT(*) AS total FROM ITEM `;
+        }
         let queryValue = [];
 
         const searchValue = `WHERE CONCAT(itemBrand, itemCategory, itemType, itemScale, itemSeries, itemName) LIKE ? `;
         sql += searchValue;
         queryValue.push(search);
         
-        if (itemBrand !== "") {
+        if (itemBrand[0] !== "") {
             const brandQueryValue = itemBrand.map(() => "?").join(",");
             const brandValue = `AND itemBrand IN (${brandQueryValue}) `;
             sql += brandValue;
@@ -44,7 +47,7 @@ const queryItemPromise = (search, itemBrand, itemCategory, itemType, itemScale, 
             }
         }
 
-        if (itemCategory !== "") {
+        if (itemCategory[0] !== "") {
             const categoryQueryValue = itemCategory.map(() => "?").join(",");
             const categoryValue = `AND itemCategory IN (${categoryQueryValue}) `;
             sql += categoryValue;
@@ -53,7 +56,7 @@ const queryItemPromise = (search, itemBrand, itemCategory, itemType, itemScale, 
             }
         }
 
-        if (itemType !== "") {
+        if (itemType[0] !== "") {
             const typeQueryValue = itemType.map(() => "?").join(",");
             const typeValue = `AND itemType IN (${typeQueryValue}) `;
             sql += typeValue;
@@ -62,18 +65,18 @@ const queryItemPromise = (search, itemBrand, itemCategory, itemType, itemScale, 
             }
         }
 
-        if (itemScale !== "") {
+        if (itemScale[0] !== "") {
             const scaleQueryValue = itemScale.map(() => "?").join(",");
-            const scaleValue = `AND itemType IN (${scaleQueryValue}) `;
+            const scaleValue = `AND itemScale IN (${scaleQueryValue}) `;
             sql += scaleValue;
             for (var i = 0; i < itemScale.length; i++) {
                 queryValue.push(itemScale[i]);
             }
         }
 
-        if (itemSeries !== "") {
+        if (itemSeries[0] !== "") {
             const seriesQueryValue = itemSeries.map(() => "?").join(",");
-            const seriesValue = `AND itemType IN (${seriesQueryValue}) `;
+            const seriesValue = `AND itemSeries IN (${seriesQueryValue}) `;
             sql += seriesValue;
             for (var i = 0; i < itemSeries.length; i++) {
                 queryValue.push(itemSeries[i]);
@@ -96,6 +99,11 @@ const queryItemPromise = (search, itemBrand, itemCategory, itemType, itemScale, 
             sql += `AND itemQuantity > -1 `;
         }
 
+        if (group !== "") {
+            sql += `GROUP BY ${group}`;
+            queryValue.push(group);
+        }
+
         pool.query(sql, queryValue, (error, result) => {
             if (error) {
                 return reject(error);
@@ -108,29 +116,64 @@ const queryItemPromise = (search, itemBrand, itemCategory, itemType, itemScale, 
 
 app.get('/item', function(req,res) {
     let search = `%${""}%`
-    let brandValue = "";
-    let categoryValue = "";
-    let typeValue = "";
-    let scaleValue = "";
-    let seriesValue = "";
-    let nameValue = "";
+    let brandValue = [""];
+    let categoryValue = [""];
+    let typeValue = [""];
+    let scaleValue = [""];
+    let seriesValue = [""];
+    let nameValue = [""];
     let minPriceValue = 0;
     let maxPriceValue = 1000000;
     let discountValue = false;
     let statusValue = "";
-    
-    if (req.query) {
+    let group = "";
+
+    if (req.query.search) {
         search = `%${req.query.search}%`
+    }
+
+    if (req.query.brandValue) {
         brandValue = req.query.brandValue;
+    }
+
+    if (req.query.categoryValue) {
         categoryValue = req.query.categoryValue;
+    }
+
+    if (req.query.typeValue) {
         typeValue = req.query.typeValue;
+    }
+
+    if (req.query.scaleValue) {
         scaleValue = req.query.scaleValue;
+    }
+
+    if (req.query.seriesValue) {
         seriesValue = req.query.seriesValue;
+    }
+
+    if (req.query.nameValue) {
         nameValue = req.query.nameValue;
+    }
+
+    if (req.query.minPriceValue) {
         minPriceValue = req.query.minPriceValue;
+    }
+
+    if (req.query.maxPriceValue) {
         maxPriceValue = req.query.maxPriceValue;
+    }
+
+    if (req.query.discountValue) {
         discountValue = req.query.discountValue; 
+    }
+
+    if (req.query.statusValue) {
         statusValue = req.query.statusValue;
+    }
+
+    if (req.query.group) {
+        group = req.query.group;
     }
 
     let databaseResult = 
@@ -145,7 +188,8 @@ app.get('/item', function(req,res) {
             minPriceValue,
             maxPriceValue,
             discountValue,
-            statusValue
+            statusValue,
+            group
         );
 
     databaseResult
