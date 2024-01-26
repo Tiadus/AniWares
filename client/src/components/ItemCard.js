@@ -3,7 +3,6 @@ import Card from 'react-bootstrap/Card';
 import "./ItemCard.css";
 
 function ItemCard({item}) {
-    console.log(item.itemDiscount);
     return (
       <Card className='itemCard'>
           <div className='cardImageContainer'>
