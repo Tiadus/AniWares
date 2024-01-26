@@ -23,12 +23,12 @@ const Shop = () => {
         let discountItemRequest = {
             params: {
                 search: "",
-                brandValue: "",
-                categoryValue: "",
-                typeValue: "",
-                scaleValue: "",
-                seriesValue: "",
-                nameValue: "",
+                brandValue: [""],
+                categoryValue: [""],
+                typeValue: [""],
+                scaleValue: [""],
+                seriesValue: [""],
+                nameValue: [""],
                 minPriceValue: 0,
                 maxPriceValue: 1000000,
                 discountValue: true,
