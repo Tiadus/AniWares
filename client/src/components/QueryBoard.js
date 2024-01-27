@@ -1,85 +1,66 @@
-import ItemCard from "../components/ItemCard";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import DisplayBoard from "./DisplayBoard";
 
-const QueryBoard = () => {
-    const withFilter = () => {
-        return (
-            <Row className="gy-4">
-            <Col xxl={3} xl={3} lg={3} md={12} sm={12}>
-                <Col>Filter Value</Col>
-                <Col>Filter Value</Col>
-                <Col>Filter Value</Col>
-                <Col>Filter Value</Col>
-                <Col>Filter Value</Col>
-            </Col>
-            <Col xxl={9} xl={9} lg={9} md={12} sm={12}>
-                <Row xxl={3} xl={2} lg={2} md={2} sm={2} className="gy-4">
-                <Col style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                    <ItemCard image="rem.jpg"/>
-                </Col>
-                <Col style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                    <ItemCard image="erisss.jpg"/>
-                </Col>
-                <Col style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                    <ItemCard image="eriss.jpg"/>
-                </Col>
-                <Col style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                    <ItemCard image="emilia.jpg"/>
-                </Col>
-                <Col style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                    <ItemCard image="nino.jpg"/>
-                </Col>
-                <Col style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                    <ItemCard image="melusine.jpeg"/>
-                </Col>
-                <Col style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                    <ItemCard image="morgan.jpg"/>
-                </Col>
-                <Col style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                    <ItemCard image="eris.jpg"/>
-                </Col>
-                </Row>
-            </Col>
-            </Row>
+const QueryBoard = (props) => {
+    const filterChangeHandler = (event) => {
+        props.filterChangeHandler(event);
+    }
+
+    const createFilterSection = (queryAttribute, filterColumn, filterName) => {
+        let filterValues = props.sessionData[queryAttribute];
+
+        if (filterValues.length === 0 || filterValues === null || filterValues === undefined) {
+            return;
+        }
+
+        let filterSection = filterValues.map(item => {
+            return (
+                <div style={{width: "100%"}} key={item[filterColumn] + props.sessionData.search}>
+                    <input type="checkbox" name={filterColumn} value={item[filterColumn]} onChange={filterChangeHandler}/> {' '}
+                    <span>{item[filterColumn]}</span> {' '}
+                    <span>({item.total})</span>
+                </div>
+            )
+        })
+        return(
+            <div style={{width: "100%", borderBottom: "1px solid grey", marginBottom: "10%"}} key={filterName}>
+                <h2>{filterName}</h2>
+                {filterSection}
+            </div>
         );
     }
-        
-    const withoutFilter = () => {
-        <Row className="gy-4">
-            <Col xxl={12} xl={12} lg={12} md={12} sm={12}>
-            <Row xxl={4} xl={4} lg={2} md={2} sm={2} className="gy-4">
-                <Col style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                    <ItemCard image="rem.jpg"/>
-                </Col>
-                <Col style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                    <ItemCard image="erisss.jpg"/>
-                </Col>
-                <Col style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                    <ItemCard image="eriss.jpg"/>
-                </Col>
-                <Col style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                    <ItemCard image="emilia.jpg"/>
-                </Col>
-                <Col style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                    <ItemCard image="nino.jpg"/>
-                </Col>
-                <Col style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                    <ItemCard image="melusine.jpeg"/>
-                </Col>
-                <Col style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                    <ItemCard image="morgan.jpg"/>
-                </Col>
-                <Col style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                    <ItemCard image="eris.jpg"/>
-                </Col>
-            </Row>
-            </Col>
-        </Row>
+
+    const createFilterTable = () => {
+        let filterTable = [];
+
+        let brandFilter = createFilterSection("itemBrand", "itemBrand", "Brand");
+        filterTable.push(brandFilter);
+
+        let categoryFilter = createFilterSection("itemCategory", "itemCategory", "Category");
+        filterTable.push(categoryFilter);
+
+        let typeFilter = createFilterSection("itemType", "itemType", "Type");
+        filterTable.push(typeFilter);
+
+        let scaleFilter = createFilterSection("itemScale", "itemScale", "Scale");
+        filterTable.push(scaleFilter);
+
+        let seriesFilter = createFilterSection("itemSeries", "itemSeries", "Series");
+        filterTable.push(seriesFilter);
+
+        return filterTable;
     }
 
     return(
-        <h1>WIP</h1>
+        <Row className="gy-4">
+            <Col xxl={2} xl={2} lg={2} md={12} sm={12}>
+                {createFilterTable()}
+            </Col>
+            <Col>
+                <DisplayBoard items={props.sessionData.items} withFilter={true}/>
+            </Col>
+        </Row>
     )
 }
 
