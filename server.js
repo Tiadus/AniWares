@@ -114,82 +114,92 @@ const queryItemPromise = (search, itemBrand, itemCategory, itemType, itemScale, 
     });
 }
 
+const getRequest = (req) => {
+    let queryJSON = {
+        search: `%${""}%`,
+        brandValue: [""],
+        categoryValue: [""],
+        typeValue: [""],
+        scaleValue: [""],
+        seriesValue: [""],
+        nameValue: [""],
+        minPriceValue: 0,
+        maxPriceValue: 1000000,
+        discountValue: false,
+        statusValue: "",
+        group: ""
+    };
+
+    if(req) {
+        if (req.query.search) {
+            queryJSON.search = `%${req.query.search}%`
+        }
+    
+        if (req.query.brandValue) {
+            queryJSON.brandValue = req.query.brandValue;
+        }
+    
+        if (req.query.categoryValue) {
+            queryJSON.categoryValue = req.query.categoryValue;
+        }
+    
+        if (req.query.typeValue) {
+            queryJSON.typeValue = req.query.typeValue;
+        }
+    
+        if (req.query.scaleValue) {
+            queryJSON.scaleValue = req.query.scaleValue;
+        }
+    
+        if (req.query.seriesValue) {
+            queryJSON.seriesValue = req.query.seriesValue;
+        }
+    
+        if (req.query.nameValue) {
+            queryJSON.nameValue = req.query.nameValue;
+        }
+    
+        if (req.query.minPriceValue) {
+            queryJSON.minPriceValue = req.query.minPriceValue;
+        }
+    
+        if (req.query.maxPriceValue) {
+            queryJSON.maxPriceValue = req.query.maxPriceValue;
+        }
+    
+        if (req.query.discountValue) {
+            queryJSON.discountValue = req.query.discountValue; 
+        }
+    
+        if (req.query.statusValue) {
+            queryJSON.statusValue = req.query.statusValue;
+        }
+    
+        if (req.query.group) {
+            queryJSON.group = req.query.group;
+        }
+    }
+
+    return queryJSON;
+}
+
 app.get('/item', function(req,res) {
-    let search = `%${""}%`
-    let brandValue = [""];
-    let categoryValue = [""];
-    let typeValue = [""];
-    let scaleValue = [""];
-    let seriesValue = [""];
-    let nameValue = [""];
-    let minPriceValue = 0;
-    let maxPriceValue = 1000000;
-    let discountValue = false;
-    let statusValue = "";
-    let group = "";
-
-    if (req.query.search) {
-        search = `%${req.query.search}%`
-    }
-
-    if (req.query.brandValue) {
-        brandValue = req.query.brandValue;
-    }
-
-    if (req.query.categoryValue) {
-        categoryValue = req.query.categoryValue;
-    }
-
-    if (req.query.typeValue) {
-        typeValue = req.query.typeValue;
-    }
-
-    if (req.query.scaleValue) {
-        scaleValue = req.query.scaleValue;
-    }
-
-    if (req.query.seriesValue) {
-        seriesValue = req.query.seriesValue;
-    }
-
-    if (req.query.nameValue) {
-        nameValue = req.query.nameValue;
-    }
-
-    if (req.query.minPriceValue) {
-        minPriceValue = req.query.minPriceValue;
-    }
-
-    if (req.query.maxPriceValue) {
-        maxPriceValue = req.query.maxPriceValue;
-    }
-
-    if (req.query.discountValue) {
-        discountValue = req.query.discountValue; 
-    }
-
-    if (req.query.statusValue) {
-        statusValue = req.query.statusValue;
-    }
-
-    if (req.query.group) {
-        group = req.query.group;
-    }
+    let queryJSON = getRequest(req);
 
     let databaseResult = 
         queryItemPromise(
-            search,
-            brandValue,
-            categoryValue,
-            typeValue,
-            scaleValue,
-            seriesValue,
-            nameValue,
-            minPriceValue,
-            maxPriceValue,
-            discountValue,
-            statusValue,
-            group
+            queryJSON.search,
+            queryJSON.brandValue,
+            queryJSON.categoryValue,
+            queryJSON.typeValue,
+            queryJSON.scaleValue,
+            queryJSON.seriesValue,
+            queryJSON.nameValue,
+            queryJSON.minPriceValue,
+            queryJSON.maxPriceValue,
+            queryJSON.discountValue,
+            queryJSON.statusValue,
+            queryJSON.group
         );
 
     databaseResult
