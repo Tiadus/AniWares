@@ -38,7 +38,7 @@ const queryItemPromise = (search, itemBrand, itemCategory, itemType, itemScale, 
         sql += searchValue;
         queryValue.push(search);
         
-        if (itemBrand[0] !== "") {
+        if (itemBrand[0] !== "" && group !== "itemBrand") {
             const brandQueryValue = itemBrand.map(() => "?").join(",");
             const brandValue = `AND itemBrand IN (${brandQueryValue}) `;
             sql += brandValue;
@@ -47,7 +47,7 @@ const queryItemPromise = (search, itemBrand, itemCategory, itemType, itemScale, 
             }
         }
 
-        if (itemCategory[0] !== "") {
+        if (itemCategory[0] !== "" && group !== "itemCategory") {
             const categoryQueryValue = itemCategory.map(() => "?").join(",");
             const categoryValue = `AND itemCategory IN (${categoryQueryValue}) `;
             sql += categoryValue;
@@ -56,7 +56,7 @@ const queryItemPromise = (search, itemBrand, itemCategory, itemType, itemScale, 
             }
         }
 
-        if (itemType[0] !== "") {
+        if (itemType[0] !== "" && group !== "itemType") {
             const typeQueryValue = itemType.map(() => "?").join(",");
             const typeValue = `AND itemType IN (${typeQueryValue}) `;
             sql += typeValue;
@@ -65,7 +65,7 @@ const queryItemPromise = (search, itemBrand, itemCategory, itemType, itemScale, 
             }
         }
 
-        if (itemScale[0] !== "") {
+        if (itemScale[0] !== "" && group !== "itemScale") {
             const scaleQueryValue = itemScale.map(() => "?").join(",");
             const scaleValue = `AND itemScale IN (${scaleQueryValue}) `;
             sql += scaleValue;
@@ -74,7 +74,7 @@ const queryItemPromise = (search, itemBrand, itemCategory, itemType, itemScale, 
             }
         }
 
-        if (itemSeries[0] !== "") {
+        if (itemSeries[0] !== "" && group !== "itemSeries") {
             const seriesQueryValue = itemSeries.map(() => "?").join(",");
             const seriesValue = `AND itemSeries IN (${seriesQueryValue}) `;
             sql += seriesValue;
@@ -209,6 +209,57 @@ app.get('/item', function(req,res) {
     .catch(error => {
         res.json({error: "An error has occured, please contact admin! Error: " + error});
     });
+});
+
+app.get('/search', function(req,res) {
+    let queryJSON = getRequest(req);
+    Promise.all(
+        [
+            queryItemPromise(
+                queryJSON.search, queryJSON.brandValue, queryJSON.categoryValue, queryJSON.typeValue,
+                queryJSON.scaleValue, queryJSON.seriesValue, queryJSON.nameValue, queryJSON.minPriceValue,
+                queryJSON.maxPriceValue, queryJSON.discountValue, queryJSON.statusValue, queryJSON.group
+            ),
+            queryItemPromise(
+                queryJSON.search, queryJSON.brandValue, queryJSON.categoryValue, queryJSON.typeValue,
+                queryJSON.scaleValue, queryJSON.seriesValue, queryJSON.nameValue, queryJSON.minPriceValue,
+                queryJSON.maxPriceValue, queryJSON.discountValue, queryJSON.statusValue, "itemBrand"
+            ),
+            queryItemPromise(
+                queryJSON.search, queryJSON.brandValue, queryJSON.categoryValue, queryJSON.typeValue,
+                queryJSON.scaleValue, queryJSON.seriesValue, queryJSON.nameValue, queryJSON.minPriceValue,
+                queryJSON.maxPriceValue, queryJSON.discountValue, queryJSON.statusValue, "itemCategory"
+            ),
+            queryItemPromise(
+                queryJSON.search, queryJSON.brandValue, queryJSON.categoryValue, queryJSON.typeValue,
+                queryJSON.scaleValue, queryJSON.seriesValue, queryJSON.nameValue, queryJSON.minPriceValue,
+                queryJSON.maxPriceValue, queryJSON.discountValue, queryJSON.statusValue, "itemType"
+            ),
+            queryItemPromise(
+                queryJSON.search, queryJSON.brandValue, queryJSON.categoryValue, queryJSON.typeValue,
+                queryJSON.scaleValue, queryJSON.seriesValue, queryJSON.nameValue, queryJSON.minPriceValue,
+                queryJSON.maxPriceValue, queryJSON.discountValue, queryJSON.statusValue, "itemScale"
+            ),
+            queryItemPromise(
+                queryJSON.search, queryJSON.brandValue, queryJSON.categoryValue, queryJSON.typeValue,
+                queryJSON.scaleValue, queryJSON.seriesValue, queryJSON.nameValue, queryJSON.minPriceValue,
+                queryJSON.maxPriceValue, queryJSON.discountValue, queryJSON.statusValue, "itemSeries"
+            )
+        ]
+    ).then(results => {
+        res.json(
+            {
+                items: results[0],
+                brands: results[1],
+                categories: results[2],
+                types: results[3],
+                scales: results[4],
+                series: results[5]
+            }
+        )
+    }).catch(error => {
+        console.log(error);
+    })
 });
 
 app.listen(4000, function() {
