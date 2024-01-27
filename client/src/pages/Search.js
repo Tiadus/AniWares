@@ -26,35 +26,6 @@ const Search = () => {
         fetchSearchData();
     }, []);
 
-    const fetchFilterData = async (
-        search, brandValue, categoryValue, typeValue, scaleValue,
-        seriesValue, minPriceValue, maxPriceValue, discountValue,
-        statusValue, group, ignore) => {
-            let params = {
-                    search: search,
-                    brandValue: brandValue,
-                    categoryValue: categoryValue,
-                    typeValue: typeValue,
-                    scaleValue: scaleValue,
-                    seriesValue: seriesValue,
-                    nameValue: [""],
-                    minPriceValue: minPriceValue,
-                    maxPriceValue: maxPriceValue,
-                    discountValue: discountValue,
-                    statusValue: statusValue,
-                    group: group
-                };
-            
-            params = {
-                ...params,
-                [ignore]: [""]
-            }
-
-            let filterRequest = {params};
-            let filterResponse = await axios.get("/item", filterRequest);
-            return filterResponse.data;
-    }
-
     const fetchSearchData = async () => {
         let search = query;
         if (search === null) {
@@ -106,7 +77,7 @@ const Search = () => {
             statValue = "";
         }
 
-        let itemRequest = {
+        let sessionRequest = {
             params: {
                 search: search,
                 brandValue: brandValue,
@@ -122,38 +93,16 @@ const Search = () => {
             }
         }
 
-        let itemResponse = await axios.get("/item", itemRequest);
-        let items = itemResponse.data;
+        let sessionResponse = await axios.get("/search", sessionRequest);
+        let sessionData = sessionResponse.data;
+        let items = sessionData.items;
+        let brandFilter = sessionData.brands;
+        let categoryFilter = sessionData.categories
+        let typeFilter = sessionData.types;
+        let scaleFilter = sessionData.scales;
+        let seriesFilter = sessionData.series
 
-        let brandFilter = await fetchFilterData(
-            search, brandValue, categoryValue, typeValue,
-            scaleValue, seriesValue, minPValue, maxPValue,
-            disValue, statValue, "itemBrand", "brandValue"
-        );
-
-        let categoryFilter = await fetchFilterData(
-            search, brandValue, categoryValue, typeValue,
-            scaleValue, seriesValue, minPValue, maxPValue,
-            disValue, statValue, "itemCategory", "categoryValue"
-        );
-
-        let typeFilter = await fetchFilterData(
-            search, brandValue, categoryValue, typeValue,
-            scaleValue, seriesValue, minPValue, maxPValue,
-            disValue, statValue, "itemType", "typeValue"
-        );
-
-        let scaleFilter = await fetchFilterData(
-            search, brandValue, categoryValue, typeValue,
-            scaleValue, seriesValue, minPValue, maxPValue,
-            disValue, statValue, "itemScale", "scaleValue"
-        );
-
-        let seriesFilter = await fetchFilterData(
-            search, brandValue, categoryValue, typeValue,
-            scaleValue, seriesValue, minPValue, maxPValue,
-            disValue, statValue, "itemSeries", "seriesValue"
-        );
+        console.log(sessionData);
         
         setSessionData({
             success: true,
