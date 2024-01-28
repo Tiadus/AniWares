@@ -3,11 +3,9 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import QueryBoard from "../components/QueryBoard";
 import Container from "react-bootstrap/esm/Container";
-import MainNavBar from "../components/NavBar";
-import Footer from "../components/Footer";
 import { useNavigate } from 'react-router-dom';
 
-const Search = () => {
+const Search = (props) => {
     const navigate = useNavigate();
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
@@ -182,19 +180,17 @@ const Search = () => {
     }
 
     return (
-        <div>
-            <MainNavBar />
-            <div style={{marginTop: "3%"}}>
-                <Container>
-                    {sessionData.success === true && <QueryBoard sessionData={sessionData} filterChangeHandler={filterChangeHandler}/>}
-                </Container> 
-            </div>
-            <div style={{width: "100%", textAlign: "center", background:"#333333", paddingTop: "1%", marginTop: "4%", paddingBottom: "2%"}}>
-                <Container>
-                    <Footer />
-                </Container>
-            </div>
-        </div>
+        <Container>
+            {
+                sessionData.success === true
+                &&
+                <QueryBoard 
+                sessionData={sessionData}
+                filterChangeHandler={filterChangeHandler}
+                searchClick = {props.searchClick}
+                />
+            }
+        </Container> 
     );
 }
 

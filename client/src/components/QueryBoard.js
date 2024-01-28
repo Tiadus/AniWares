@@ -16,7 +16,7 @@ const QueryBoard = (props) => {
 
         let filterSection = filterValues.map(item => {
             return (
-                <div style={{width: "100%"}} key={item[filterColumn] + props.sessionData.search}>
+                <div style={{width: "100%"}} key={item[filterColumn] + props.sessionData.search + props.searchClick}>
                     <input type="checkbox" name={filterColumn} value={item[filterColumn]} onChange={filterChangeHandler}/> {' '}
                     <span>{item[filterColumn]}</span> {' '}
                     <span>({item.total})</span>

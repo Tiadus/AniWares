@@ -9,27 +9,34 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function MainNavBar() {
+function MainNavBar(props) {
   let expand = "lg";
   const searchRef = useRef(null);
   const navigate = useNavigate();
 
   const handleSearchSubmit = () => {
     const query = searchRef.current.value;
+    props.setSearchClick((prevCount) => prevCount + 1);
     navigate(`/search?query=${query}`);
   }
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
     const query = searchRef.current.value;
+    props.setSearchClick((prevCount) => prevCount + 1);
     navigate(`/search?query=${query}`);
+  }
+
+  const handleBrandClick = () => {
+    searchRef.current.value = "";
+    navigate(`/`);
   }
 
   return (
     <>
         <Navbar expand={expand} className="mb-3" style={{backgroundColor: "#d3d3d3"}}>
           <Container fluid>
-            <Navbar.Brand href="#">
+            <Navbar.Brand onClick={handleBrandClick} style={{cursor: "pointer"}}>
                 <span style={{color: "green"}}>
                     Ani
                 </span>
