@@ -1,4 +1,4 @@
-<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>770</x><y>40</y><w>210</w><h>270</h></coordinates><panel_attributes>Item
+<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>770</x><y>40</y><w>210</w><h>270</h></coordinates><panel_attributes>ITEM
 --
 itemCode                                       ID0
 itemBrand
@@ -10,20 +10,20 @@ itemName
 itemImage
 itemPrice
 itemDiscount
-itemQuantity</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>20</x><y>10</y><w>210</w><h>100</h></coordinates><panel_attributes>User
+itemQuantity</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>20</x><y>10</y><w>210</w><h>100</h></coordinates><panel_attributes>USER
 --
 userCode                                       ID0
 userName                                     ID1
 userEmail                                      ID2
 userPassword
-status</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>400</x><y>10</y><w>210</w><h>100</h></coordinates><panel_attributes>Cart
+status</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>400</x><y>10</y><w>210</w><h>100</h></coordinates><panel_attributes>CART
 --
 userCode                                       ID0
 itemCode                                       ID0
-cartItemQuantity</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>20</x><y>220</y><w>210</w><h>100</h></coordinates><panel_attributes>Order
+cartItemQuantity</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>20</x><y>220</y><w>210</w><h>100</h></coordinates><panel_attributes>ORDER
 --
 userCode                                       ID0
-orderCode                                     ID0</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>400</x><y>220</y><w>210</w><h>100</h></coordinates><panel_attributes>Order_Item
+orderCode                                     ID0</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>400</x><y>220</y><w>210</w><h>100</h></coordinates><panel_attributes>ORDER_ITEM
 --
 orderCode                                     ID0
 itemCode                                       ID0
