@@ -15,7 +15,8 @@ itemQuantity</panel_attributes><additional_attributes></additional_attributes></
 userCode                                       ID0
 userName                                     ID1
 userEmail                                      ID2
-userPassword</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>400</x><y>10</y><w>210</w><h>100</h></coordinates><panel_attributes>Cart
+userPassword
+status</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>400</x><y>10</y><w>210</w><h>100</h></coordinates><panel_attributes>Cart
 --
 userCode                                       ID0
 itemCode                                       ID0
