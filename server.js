@@ -262,6 +262,75 @@ app.get('/search', function(req,res) {
     })
 });
 
+const queryAccountInformationPromise = (userCode) => {
+    return new Promise(function (resolve,reject) {
+        const sql = 'SELECT * FROM SHOP_USER WHERE userCode = ?';
+        pool.query(sql, [userCode], (error, result) => {
+            if (error) {
+                return reject(error);
+            }
+
+            resolve(result);
+        })
+    })
+}
+
+const queryAccountOrderPromise = (userCode) => {
+    return new Promise(function (resolve,reject) {
+        const sql = 'SELECT * FROM USER_ORDER WHERE userCode = ?'
+        pool.query(sql, [userCode], (error, result) => {
+            if (error) {
+                return reject(error);
+            }
+
+            resolve(result);
+        })
+    })
+}
+
+app.get('/account/:user?', (req,res) => {
+    const userID = req.params.user;
+    Promise.all([
+        queryAccountInformationPromise(userID),
+        queryAccountOrderPromise(userID)
+    ])
+    .then(results => {
+        res.json(
+            {
+                userInformation: results[0][0],
+                userOrders: results[1]
+            }
+        );
+    })
+    .catch(error => {
+        res.json({error: error});
+    })
+
+});
+
+const queryOrderPromise = (orderID) => {
+    return new Promise(function(resolve,reject) {
+        const sql = 'SELECT * FROM ORDER_ITEM JOIN ITEM ON ORDER_ITEM.itemCode = ITEM.itemCode WHERE orderCode = ?';
+        pool.query(sql, [orderID], (error, result) => {
+            if (error) {
+                return reject(error);
+            }
+            resolve(result);
+        });
+    });
+}
+
+app.get('/order', (req,res) => {
+    const orderID = req.query.oid;
+    queryOrderPromise(orderID)
+    .then(result => {
+        res.json(result);
+    })
+    .catch(error => {
+
+    });
+})
+
 app.listen(4000, function() {
     console.log("Listening on port 4000");
 });
