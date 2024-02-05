@@ -32,6 +32,12 @@ function MainNavBar(props) {
     navigate(`/`);
   }
 
+  const toAccount = () => {
+    searchRef.current.value = "";
+    let loginUser = props.user;
+    navigate(`/account`);
+  };
+
   return (
     <>
         <Navbar expand={expand} className="mb-3" style={{backgroundColor: "#d3d3d3"}}>
@@ -82,7 +88,7 @@ function MainNavBar(props) {
                 </Form>
                 <Nav className="justify-content-end flex-grow-1">
                   <Nav.Link href="#action1">Cart</Nav.Link>
-                  <Nav.Link href="#action2">Account</Nav.Link>
+                  <Nav.Link onClick={toAccount}>Account</Nav.Link>
                 </Nav>
               </Offcanvas.Body>
             </Navbar.Offcanvas>
