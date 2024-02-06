@@ -3,6 +3,7 @@ const express = require('express');
 const mysql = require('mysql2');
 const app = express();
 const bodyParser = require('body-parser');
+//const { default: App } = require('./client/src/App');
 
 //Required for body-parser
 app.use(bodyParser.json());
@@ -329,6 +330,130 @@ app.get('/order', (req,res) => {
     .catch(error => {
 
     });
+})
+
+const queryItemCartPromise = (userID, itemCode) => {
+    return new Promise(function(resolve,reject) {
+        let queryValue = [];
+        let sql = 'SELECT * FROM USER_CART JOIN ITEM ON USER_CART.itemCode = ITEM.itemCode WHERE userCode = ?';
+        queryValue.push(userID);
+
+        pool.query(sql, queryValue, (error, result) => {
+            if (error) {
+                return reject(error);
+            }
+            resolve(result);
+        });
+    });
+}
+
+const queryCartPromise = (userID, itemCode) => {
+    return new Promise((resolve, reject) => {
+        let queryValue = [userID, itemCode]
+        let sql = 'SELECT * FROM USER_CART WHERE userCode = ? AND itemCode = ?';
+        pool.query(sql, queryValue, (error, result) => {
+            if (error) {
+                return reject(error);
+            }
+            resolve(result);
+        });
+    });
+}
+
+app.get('/cart/:user?', (req,res) => {
+    const userID = req.params.user;
+    queryItemCartPromise(userID)
+    .then(result => {
+        res.json(result);
+    })
+    .catch(error => {
+        res.json(error);
+    });
+})
+
+const insertCartPromise = (userCode, itemCode, cartItemQuantity) => {
+    return new Promise((resolve,reject) => {
+        const sql = "INSERT INTO USER_CART VALUES(?, ?, ?)";
+        pool.query(sql, [userCode, itemCode, cartItemQuantity], (error, result) => {
+            if (error) {
+                return reject(error);
+            }
+            if (result.affectedRows > 0) {
+                resolve("Operation Insert Success");
+            }
+        }) 
+    })
+}
+
+app.post('/api/addCart', (req,res) => {
+    let body = req.body;
+    if (body === undefined) {
+        return;
+    }
+    let userCode = body.userCode;
+    let itemCode = body.itemCode;
+
+    let queryCart = queryCartPromise(userCode,itemCode);
+    queryCart.then(result => {
+        if (result.length === 0) {
+            insertCartPromise(userCode, itemCode, 1)
+            .then(message => {
+                console.log(message);
+                res.json({message: message});
+            })
+            .catch(error => {
+                console.log(error);
+                res.json({message: error});
+            })
+        }
+
+        if (result.length > 0) {
+            let oldCartItemQuantity = result[0].cartItemQuantity;
+            let newCartItemQuantity = oldCartItemQuantity + 1;
+            updateCartPromise(userCode, itemCode, newCartItemQuantity)
+            .then(message => {
+                console.log(message);
+                res.json({message: message});
+            })
+            .catch(error => {
+                console.log(error);
+                res.json({message: error});
+            });
+        }
+    })
+})
+
+const updateCartPromise = (userCode, itemCode, cartItemQuantity) => {
+    return new Promise((resolve,reject) => {
+        const sql = "UPDATE USER_CART SET cartItemQuantity = ? WHERE userCode = ? AND itemCode = ?";
+        pool.query(sql, [cartItemQuantity, userCode, itemCode], (error, result) => {
+            if (error) {
+                return reject(error);
+            }
+            resolve("Operation Success");
+        })
+    })
+}
+
+app.post('/api/updateCart', (req,res) => {
+    let body = req.body;
+    if (body === undefined) {
+        return;
+    }
+
+    if (body.fromAddCart == false) {
+        let userCode = body.userCode;
+        let itemCode = body.itemCode;
+        let cartItemQuantity = body.cartItemQuantity;
+        updateCartPromise(userCode, itemCode, cartItemQuantity)
+        .then(message => {
+            res.json({message: message});
+        })
+        .catch(error => {
+            console.log(error);
+        });
+
+    }
 })
 
 app.listen(4000, function() {
