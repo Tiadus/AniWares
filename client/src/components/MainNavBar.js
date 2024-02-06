@@ -34,9 +34,16 @@ function MainNavBar(props) {
 
   const toAccount = () => {
     searchRef.current.value = "";
-    let loginUser = props.user;
     navigate(`/account`);
   };
+
+  const toCart = () => {
+    searchRef.current.value = "";
+    if (props.user === 0) {
+      return navigate(`/account`);
+    }
+    navigate('/cart');
+  }
 
   return (
     <>
@@ -87,7 +94,7 @@ function MainNavBar(props) {
                   <Button variant="outline-success" onClick={handleSearchSubmit}>Search</Button>
                 </Form>
                 <Nav className="justify-content-end flex-grow-1">
-                  <Nav.Link href="#action1">Cart</Nav.Link>
+                  <Nav.Link onClick={toCart}>Cart</Nav.Link>
                   <Nav.Link onClick={toAccount}>Account</Nav.Link>
                 </Nav>
               </Offcanvas.Body>
