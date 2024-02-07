@@ -1,8 +1,4 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
 import AccountManagerTab from "../components/AccountManagerTab";
-import AccountInformation from "../components/AccountInformation";
-import AccountOrder from "../components/AccountOrder";
 
 const AccountManager = (props) => {
 

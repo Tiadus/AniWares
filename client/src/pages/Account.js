@@ -1,5 +1,4 @@
-import { useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import AccountRegisterLogin from "./AccountRegisterLogin";
 import AccountManager from "./AccountManager";
 import Container from "react-bootstrap/esm/Container";

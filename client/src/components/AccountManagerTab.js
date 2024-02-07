@@ -28,7 +28,7 @@ const AccountManagerTab = (props) => {
 
     return (
         <Tabs
-            defaultActiveKey="profile"
+            defaultActiveKey="home"
             id="fill-tab-example"
             className="mb-3"
             fill

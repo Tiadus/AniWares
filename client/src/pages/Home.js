@@ -2,7 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Container from 'react-bootstrap/Container';
 import { useState, useEffect } from "react";
 import DisplayBoard from "../components/DisplayBoard";
-import "./Shop.css"
+import "./Home.css"
 import Banner from "../components/Banner";
 import axios from "axios";
 

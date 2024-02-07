@@ -1,7 +1,7 @@
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import "./ItemCard.css";
-import { useDispatch, useSelector } from 'react-redux';
+import {useSelector } from 'react-redux';
 import axios from 'axios';
 
 function ItemCard({item}) {
