@@ -39,6 +39,17 @@ const Cart = (props) => {
         });
     }
 
+    const handleCheckout = () => {
+        let checkoutCart = {
+            userCode: props.user
+        }
+
+        axios.post('/api/checkoutCart', checkoutCart)
+        .then(result => {
+            console.log("Message: " + result.data)
+        })
+    }
+
     const createCartItemTable = () => {
         if (cartItems.length == 0) {
             return (
@@ -93,7 +104,7 @@ const Cart = (props) => {
                         ${totalPrice.toFixed(2)}
                     </td>
                     <td>
-                        <button>Payment</button>
+                        <button onClick={handleCheckout}>Payment</button>
                     </td>
                 </tr>
             </tbody>
