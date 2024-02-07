@@ -456,6 +456,124 @@ app.post('/api/updateCart', (req,res) => {
     }
 })
 
+const insertOrderPromise = (orderCode, userCode, orderStatus) => {
+    //console.log("Order Code From 1: " + orderCode);
+    return new Promise((resolve, reject) => {
+        let queryValue = [orderCode, userCode, orderStatus];
+        let sql = 'INSERT INTO USER_ORDER VALUES(?, ?, ?)';
+        pool.query(sql, queryValue, (error, result) => {
+            if (error) {
+                return reject(error);
+            }
+
+            if (result.affectedRows === 0) {
+                return reject("No Update Occur");
+            }
+
+            resolve(result.affectedRows);
+        })
+    })
+}
+
+const insertOrderItemPromise = (orderCode, userCode) => {
+    //console.log("Order Code From 2: " + orderCode);
+    return new Promise((resolve, reject) => {
+        let queryValue = [orderCode, userCode];
+        let sql = (
+            'INSERT INTO ORDER_ITEM (orderCode, itemCode, orderItemQuantity) \
+            SELECT ?, itemCode, cartItemQuantity \
+            FROM USER_CART \
+            WHERE userCode = ?'
+        );
+        pool.query(sql, queryValue, (error, result) => {
+            if (error) {
+                return reject(error);
+            }
+
+            if (result.affectedRows === 0) {
+                return reject("No Update Occur");
+            }
+
+            resolve(result.affectedRows);
+        })
+    })
+}
+
+const deleteCartItem = (userCode, orderCode) => {
+    //console.log("Order Code From 3: " + orderCode);
+    return new Promise ((resolve, reject) => {
+        let queryValue = [userCode, orderCode];
+        let sql = (
+            'DELETE FROM USER_CART WHERE userCode = ? \
+            AND itemCode IN \
+            (SELECT itemCode FROM ORDER_ITEM WHERE orderCode LIKE ?)'
+        );
+        pool.query(sql, queryValue, (error, result) => {
+            if (error) {
+                return reject(error);
+            }
+    
+            if (result.affectedRows === 0) {
+                return reject("No Update Occur");
+            }
+    
+            resolve(result.affectedRows);
+        })
+    })
+}
+
+const createOrderCode = () => {
+    // Get the current date and time
+    const currentDate = new Date();
+
+    // Extract date and time components
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const hour = String(currentDate.getHours()).padStart(2, '0');
+    const minute = String(currentDate.getMinutes()).padStart(2, '0');
+    const second = String(currentDate.getSeconds()).padStart(2, '0');
+
+    // Create the formatted string
+    let formattedDateTime = `${year}${month}${day}${hour}${minute}${second}`;
+
+    return formattedDateTime;
+}
+
+app.post('/api/checkoutCart', (req,res) => {
+    let body = req.body;
+    if (body === undefined) {
+        return;
+    }
+
+    let userCode = body.userCode;
+    let orderCode = createOrderCode();
+    let orderStatus = 1;
+
+    let checkoutCart = Promise.all(
+        [
+            insertOrderPromise(orderCode, userCode, orderStatus),
+            insertOrderItemPromise(orderCode, userCode),
+            deleteCartItem(userCode, orderCode)
+        ]
+    )
+
+    checkoutCart
+    .then(results => {
+        if (results[0] === 1 && results[1] === results[2]) {
+            console.log("Operation Checkout Succeed");
+            return res.json({message: "Operation Checkout Succeed"})
+        }
+        console.log("Number of Order Insert: " + results[0]);
+        console.log("Number of Order Item Insert: " + results[1]);
+        console.log("Number of Cart Item Delete: " + results[2]);
+    })
+    .catch(error => {
+        console.log(error);
+    })
+
+})
+
 app.listen(4000, function() {
     console.log("Listening on port 4000");
 });
