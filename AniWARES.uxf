@@ -23,7 +23,8 @@ itemCode                                       ID0
 cartItemQuantity</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>20</x><y>220</y><w>210</w><h>100</h></coordinates><panel_attributes>USER_ORDER
 --
 orderCode                                     ID0
-userCode                                       </panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>400</x><y>220</y><w>210</w><h>100</h></coordinates><panel_attributes>ORDER_ITEM
+userCode 
+orderStatus                                </panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>400</x><y>220</y><w>210</w><h>100</h></coordinates><panel_attributes>ORDER_ITEM
 --
 orderCode                                     ID0
 itemCode                                       ID0
