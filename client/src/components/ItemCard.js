@@ -3,11 +3,17 @@ import Card from 'react-bootstrap/Card';
 import "./ItemCard.css";
 import {useSelector } from 'react-redux';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function ItemCard({item}) {
   const userCode = useSelector((state) => state.user.userCode);
+  const navigate = useNavigate();
 
   const addCartButtonClickHandle = () => {
+    if (userCode === 0) {
+      return navigate('/account');
+    }
+
     let addCart = {
       userCode: userCode,
       itemCode: item.itemCode

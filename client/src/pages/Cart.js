@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Table from "react-bootstrap/esm/Table";
 import Container from "react-bootstrap/esm/Container";
+import Button from "react-bootstrap/esm/Button";
 
 const Cart = (props) => {
     const [cartItems, setCartItem] = useState([]);
@@ -76,7 +77,11 @@ const Cart = (props) => {
                         />
                     </td>
                     <td>${(item.cartItemQuantity * item.itemPrice).toFixed(2)}</td>
-                    <td><button>Remove</button></td>
+                    <td>                        
+                        <Button variant="danger">
+                            Remove
+                        </Button>
+                    </td>
                 </tr>
             )
         })
@@ -97,14 +102,16 @@ const Cart = (props) => {
             <tbody>
                 {tableBodyData}
                 <tr>
-                    <td><b><u>Total</u></b></td>
+                    <td style={{fontSize: "3vh"}}><b><u>Total</u></b></td>
                     <td></td>
                     <td></td>
                     <td>
                         ${totalPrice.toFixed(2)}
                     </td>
                     <td>
-                        <button onClick={handleCheckout}>Payment</button>
+                        <Button variant="success" onClick={handleCheckout}>
+                            Payment
+                        </Button>
                     </td>
                 </tr>
             </tbody>

@@ -1,7 +1,9 @@
+import RegisterLoginTab from "../components/RegisterLoginTab";
+
 const AccountRegisterLogin = () => {
     return (
         <div>
-            <h1>Account Register Login</h1>
+            <RegisterLoginTab/>
         </div>
     )
 }

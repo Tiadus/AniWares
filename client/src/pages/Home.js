@@ -6,7 +6,7 @@ import "./Home.css"
 import Banner from "../components/Banner";
 import axios from "axios";
 
-const Shop = () => {
+const Home = () => {
     const [homeData, setHomeData] = useState(
         {
             discountItems: []
@@ -57,4 +57,4 @@ const Shop = () => {
     );
 };
 
-export default Shop;
+export default Home;
