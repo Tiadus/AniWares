@@ -278,7 +278,7 @@ const queryAccountInformationPromise = (userCode) => {
 
 const queryAccountOrderPromise = (userCode) => {
     return new Promise(function (resolve,reject) {
-        const sql = 'SELECT * FROM USER_ORDER WHERE userCode = ?'
+        const sql = 'SELECT * FROM USER_ORDER WHERE userCode = ? ORDER BY orderCode DESC'
         pool.query(sql, [userCode], (error, result) => {
             if (error) {
                 return reject(error);
@@ -575,72 +575,6 @@ app.post('/api/updateCart', (req,res) => {
     }
 })
 
-const insertOrderPromise = (orderCode, userCode, orderStatus) => {
-    //console.log("Order Code From 1: " + orderCode);
-    return new Promise((resolve, reject) => {
-        let queryValue = [orderCode, userCode, orderStatus];
-        let sql = 'INSERT INTO USER_ORDER VALUES(?, ?, ?)';
-        pool.query(sql, queryValue, (error, result) => {
-            if (error) {
-                return reject(error);
-            }
-
-            if (result.affectedRows === 0) {
-                return reject("No Update Occur");
-            }
-
-            resolve(result.affectedRows);
-        })
-    })
-}
-
-const insertOrderItemPromise = (orderCode, userCode) => {
-    //console.log("Order Code From 2: " + orderCode);
-    return new Promise((resolve, reject) => {
-        let queryValue = [orderCode, userCode];
-        let sql = (
-            'INSERT INTO ORDER_ITEM (orderCode, itemCode, orderItemQuantity) \
-            SELECT ?, itemCode, cartItemQuantity \
-            FROM USER_CART \
-            WHERE userCode = ?'
-        );
-        pool.query(sql, queryValue, (error, result) => {
-            if (error) {
-                return reject(error);
-            }
-
-            if (result.affectedRows === 0) {
-                return reject("No Update Occur");
-            }
-
-            resolve(result.affectedRows);
-        })
-    })
-}
-
-const deleteCartItem = (userCode, orderCode) => {
-    //console.log("Order Code From 3: " + orderCode);
-    return new Promise ((resolve, reject) => {
-        let queryValue = [userCode, orderCode];
-        let sql = (
-            'DELETE FROM USER_CART WHERE userCode = ? \
-            AND itemCode IN \
-            (SELECT itemCode FROM ORDER_ITEM WHERE orderCode LIKE ?)'
-        );
-        pool.query(sql, queryValue, (error, result) => {
-            if (error) {
-                return reject(error);
-            }
-    
-            if (result.affectedRows === 0) {
-                return reject("No Update Occur");
-            }
-    
-            resolve(result.affectedRows);
-        })
-    })
-}
-
 const createOrderCode = () => {
     // Get the current date and time
     const currentDate = new Date();
@@ -659,6 +593,19 @@ const createOrderCode = () => {
     return formattedDateTime;
 }
 
+const processPaymentPromise = (userCode, orderCode) => {
+    return new Promise((resolve,reject) => {
+        let sql = "CALL proceed_payment(?, ?)";
+        let queryValue = [userCode, orderCode];
+        pool.query(sql, queryValue, (error, result) => {
+            if (error) {
+                return reject(error);
+            }
+            resolve("Operation Process Payment Complete!");
+        })
+    })
+}
+
 app.post('/api/checkoutCart', (req,res) => {
     let body = req.body;
     if (body === undefined) {
@@ -667,30 +614,14 @@ app.post('/api/checkoutCart', (req,res) => {
 
     let userCode = body.userCode;
     let orderCode = createOrderCode();
-    let orderStatus = 1;
 
-    let checkoutCart = Promise.all(
-        [
-            insertOrderPromise(orderCode, userCode, orderStatus),
-            insertOrderItemPromise(orderCode, userCode),
-            deleteCartItem(userCode, orderCode)
-        ]
-    )
-
+    let checkoutCart = processPaymentPromise(userCode, orderCode);
     checkoutCart
-    .then(results => {
-        if (results[0] === 1 && results[1] === results[2]) {
-            console.log("Operation Checkout Succeed");
-            return res.json({message: "Operation Checkout Succeed"})
-        }
-        console.log("Number of Order Insert: " + results[0]);
-        console.log("Number of Order Item Insert: " + results[1]);
-        console.log("Number of Cart Item Delete: " + results[2]);
+    .then(result => {
+        console.log(result);
+        res.json({message: result});
     })
-    .catch(error => {
-        console.log(error);
-    })
-
+    .catch(error => {console.log(error)})
 })
 
 app.listen(4000, function() {
