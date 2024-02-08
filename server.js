@@ -309,6 +309,125 @@ app.get('/account/:user?', (req,res) => {
 
 });
 
+const queryAccountLoginPromise = (loginCredential, password) => {
+    return new Promise ((resolve, reject) => {
+        let queryValue = [loginCredential, password];
+        const sql = 'SELECT * FROM SHOP_USER WHERE CONCAT(userName, userEmail) LIKE ? AND userPassword LIKE ?'
+        pool.query(sql, queryValue, (error, result) => {
+            if (error) {
+                return reject(error);
+            }
+
+            if (result.length === 0) {
+                return reject(404);
+            }
+
+            resolve(result);
+        })
+    })
+}
+
+app.post('/api/login', (req, res) => {
+    let body = req.body;
+    if (!body.loginCredential || !body.password) {
+        return;
+    }
+
+    let loginCredential = body.loginCredential;
+    let password = body.password;
+    queryAccountLoginPromise(`%${loginCredential}%`, password)
+    .then(result => {
+        res.json({
+            userCode: result[0].userCode,
+            isAdmin: result[0].isAdmin
+        })
+    })
+    .catch(error => {
+        res.json({error: error});
+    })
+})
+
+const queryUserNamePromise = (userName) => {
+    return new Promise((resolve,reject) => {
+        let queryValue = [userName];
+        let sql = 'SELECT * FROM SHOP_USER WHERE userName LIKE ?';
+        pool.query(sql,queryValue, (error, result) => {
+            if (error) {
+                return reject(error);
+            }
+            resolve(result);
+        })
+    })
+}
+
+const queryUserEmailPromise = (userEmail) => {
+    return new Promise((resolve,reject) => {
+        let queryValue = [userEmail];
+        let sql = 'SELECT * FROM SHOP_USER WHERE userEmail LIKE ?';
+        pool.query(sql,queryValue, (error, result) => {
+            if (error) {
+                return reject(error);
+            }
+            resolve(result);
+        })
+    })
+}
+
+const insertUserPromise = (userName, userEmail, userPassword, isAdmin) => {
+    return new Promise((resolve, reject) => {
+        let userCode = 0;
+        let queryValue = [userCode, userName, userEmail, userPassword, isAdmin];
+        let sql = "INSERT INTO SHOP_USER VALUES(?, ?, ?, ?, ?)";
+        pool.query(sql, queryValue, (error, result) => {
+            if (error) {
+                return reject(error);
+            }
+
+            resolve(result.insertId);
+        })
+    })
+}
+
+app.post('/api/register', (req,res) => {
+    let body = req.body;
+    if (!body.userName || !body.userEmail || !body.userPassword) {
+        return;
+    }
+
+    let userName = body.userName;
+    let userEmail = body.userEmail;
+    let userPassword = body.userPassword;
+
+    Promise.all([
+        queryUserNamePromise(userName),
+        queryUserEmailPromise(userEmail)
+    ])
+    .then(results => {
+        if (results[0].length > 0) {
+            return res.json({error: 1})
+        }
+
+        if (results[1].length > 0) {
+            return res.json({error: 2})
+        }
+
+        insertUserPromise(userName, userEmail, userPassword, false)
+        .then(result => {
+            res.json({
+                userCode: result,
+                isAdmin: 0
+            })
+        })
+        .catch(error => {
+            console.log(error);
+            res.json({error: 5});
+        });
+    })
+    .catch(error => {
+        console.log(error);
+    })
+})
+
 const queryOrderPromise = (orderID) => {
     return new Promise(function(resolve,reject) {
         const sql = 'SELECT * FROM ORDER_ITEM JOIN ITEM ON ORDER_ITEM.itemCode = ITEM.itemCode WHERE orderCode = ?';
