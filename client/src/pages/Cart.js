@@ -6,13 +6,22 @@ import Button from "react-bootstrap/esm/Button";
 
 const Cart = (props) => {
     const [cartItems, setCartItem] = useState([]);
+    const [userActionCount, setUserActionCount] = useState(0);
 
-    useEffect(() => {
+    const getCartItem = () => {
         axios.get(`/cart/${props.user}`)
         .then(result => {
             let cartResult = result.data;
             setCartItem(cartResult);
         })
+    }
+
+    useEffect(() => {
+        getCartItem();
+    }, [])
+
+    useEffect(() => {
+        console.log(cartItems.length);
     }, [cartItems])
 
     const setQty = (event) => {
@@ -28,12 +37,9 @@ const Cart = (props) => {
         }
 
         axios.post('/api/updateCart', updateCart)
-        .then(
-            axios.get(`/cart/${props.user}`)
-            .then(result => {
-                let cartResult = result.data;
-                setCartItem(cartResult);
-            })
+        .then(result => {
+            getCartItem();
+        }
         )
         .catch(error => {
             console.log(error);
@@ -47,17 +53,15 @@ const Cart = (props) => {
 
         axios.post('/api/checkoutCart', checkoutCart)
         .then(result => {
-            console.log("Message: " + result.data)
+            console.log(result.data.message);
+            setCartItem([]);
+        })
+        .catch(error => {
+            console.log(error);
         })
     }
 
     const createCartItemTable = () => {
-        if (cartItems.length == 0) {
-            return (
-                <h1>You Have No Item In Cart</h1>
-            )
-        };
-
         let totalPrice = 0;
 
         let tableBodyData = cartItems.map(item => {
@@ -129,7 +133,8 @@ const Cart = (props) => {
     return (
         <Container>
         <div style={{marginTop: "2%"}}>
-            {createCartItemTable()}
+            {cartItems.length === 0 && <div><h1>You Have No Item In Cart</h1></div>}
+            {cartItems.length > 0 && createCartItemTable()}
         </div>
         </Container>
     )
