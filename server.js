@@ -3,6 +3,7 @@ const express = require('express');
 const mysql = require('mysql2');
 const app = express();
 const bodyParser = require('body-parser');
+const path = require('path');
 //const { default: App } = require('./client/src/App');
 
 //Required for body-parser
@@ -26,6 +27,9 @@ const pool = mysql.createPool({
     connectionLimit: 10,
     queueLimit: 0
   });
+
+var imagesDir = path.join(__dirname, 'images');
+app.use(express.static(imagesDir));
 
 const queryItemPromise = (search, itemBrand, itemCategory, itemType, itemScale, itemSeries, itemName, minPrice, maxPrice, discount, status, group) => {
     return new Promise(function(resolve,reject) {
