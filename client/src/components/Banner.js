@@ -6,21 +6,21 @@ function Banner() {
   return (
     <Carousel variant='dark' fade controls="true" touch="true">
         <Carousel.Item interval={2000}>
-          <Image src="banner1.jpg" fluid className='bannerImage'/>
+          <Image src="/banners/banner1.jpg" fluid className='bannerImage'/>
           <Carousel.Caption>
             <h3></h3>
             <p></p>
           </Carousel.Caption>
         </Carousel.Item>
         <Carousel.Item interval={2000}>
-          <Image src="banner2.jpg" fluid className='bannerImage'/>
+          <Image src="/banners/banner2.jpg" fluid className='bannerImage'/>
           <Carousel.Caption>
             <h3></h3>
             <p></p>
           </Carousel.Caption>
         </Carousel.Item>
         <Carousel.Item interval={2000}>
-          <Image src="banner3.jpg" fluid className='bannerImage'/>
+          <Image src="/banners/banner3.jpg" fluid className='bannerImage'/>
           <Carousel.Caption>
             <h3></h3>
             <p></p>
