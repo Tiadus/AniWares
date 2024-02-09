@@ -275,6 +275,10 @@ const queryAccountInformationPromise = (userCode) => {
                 return reject(error);
             }
 
+            if (result.length === 0) {
+                return reject("No User");
+            }
+
             resolve(result);
         })
     })
@@ -626,6 +630,58 @@ app.post('/api/checkoutCart', (req,res) => {
         res.json({message: result});
     })
     .catch(error => {console.log(error)})
+})
+
+const queryAdminOrderPromise = (orderCode) => {
+    return new Promise((resolve, reject) => {
+        let sql = 'SELECT * FROM USER_ORDER';
+        let queryValue = [];
+    
+        if (orderCode !== "") {
+            sql += " WHERE orderCode = ?";
+            queryValue.push(orderCode);
+        } else if (orderCode === "") {
+            sql += " Where orderStatus = 1";
+        }
+    
+        sql += " ORDER BY orderCode DESC";
+        pool.query(sql, queryValue, (error, result) => {
+            if (error) {
+                return reject(error);
+            }
+
+            resolve(result);
+        })
+    })
+}
+
+app.get('/api/admin/orderView', (req,res) => {
+    if (req.query.userCode === undefined) {
+        return res.json({message: "Unavailable"});
+    }
+
+    let orderCode = req.query.orderCode;
+
+    if (orderCode === undefined) {
+        console.log("Order Code Not Available");
+        return res.json({message: "Unavailable"}); 
+    }
+
+    queryAccountInformationPromise(req.query.userCode)
+    .then(result => {
+        if (result[0].isAdmin === 1) {
+            queryAdminOrderPromise(orderCode)
+            .then(result => {
+                res.json(result);
+            })
+            .catch(error => {
+                console.log(error);
+            })
+        }
+    })
+    .catch(error => {
+        console.log(error);
+    })
 })
 
 app.listen(4000, function() {
