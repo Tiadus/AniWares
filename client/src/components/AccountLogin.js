@@ -4,11 +4,13 @@ import Col from 'react-bootstrap/esm/Col';
 import axios from 'axios';
 import { useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import { setUserCode } from '../redux/userSlice';
+import { setUserCode, setUserPrivilege } from '../redux/userSlice';
 import { useState } from 'react';
 import Row from 'react-bootstrap/esm/Row';
+import { useNavigate } from 'react-router-dom';
 
 const AccountLogin = () => {
+    const navigate = useNavigate();
     const [warning,setWarning] = useState("");
     const loginCredentialRef = useRef(null);
     const passwordRef = useRef(null);
@@ -42,6 +44,10 @@ const AccountLogin = () => {
                     case 404:
                         return setWarning("No Matching User");
                 }
+            }
+            if (resultData.isAdmin === 1) {
+                navigate("/");
+                return dispatch(setUserPrivilege(resultData.isAdmin));
             }
             dispatch(setUserCode(resultData.userCode));
         })
