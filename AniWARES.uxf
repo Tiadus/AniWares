@@ -25,7 +25,7 @@ cartItemQuantity</panel_attributes><additional_attributes></additional_attribute
 orderCode                                     ID0
 userCode 
 orderStatus
-name
+customerName
 email
 adress
 city
