@@ -3,10 +3,14 @@ import { useEffect, useState } from "react";
 import Table from "react-bootstrap/esm/Table";
 import Container from "react-bootstrap/esm/Container";
 import Button from "react-bootstrap/esm/Button";
+import PaymentForm from "../components/PaymentForm";
+import ShippingForm from "../components/ShippingForm";
 
 const Cart = (props) => {
     const [cartItems, setCartItem] = useState([]);
-    const [userActionCount, setUserActionCount] = useState(0);
+    const [shipFormOpen, setShipFormOpen] = useState(false);
+    const [shipInformation, setShipInformation] = useState({})
+    const [paymentFormOpen, setPaymentFormOpen] = useState(false);
 
     const getCartItem = () => {
         axios.get(`/cart/${props.user}`)
@@ -46,8 +50,13 @@ const Cart = (props) => {
         });
     }
 
-    const handleCheckout = () => {
-        let checkoutCart = {
+    const handleProceed = () => {
+        setShipFormOpen(true);
+    }
+
+    const handlePayment = () => {
+        console.log(shipInformation);
+        /*let checkoutCart = {
             userCode: props.user
         }
 
@@ -58,14 +67,15 @@ const Cart = (props) => {
         })
         .catch(error => {
             console.log(error);
-        })
-    }
+        })*/
+    } 
 
     const createCartItemTable = () => {
         let totalPrice = 0;
 
         let tableBodyData = cartItems.map(item => {
-            totalPrice += item.itemPrice * item.cartItemQuantity;
+            let itemPrice = item.cartItemQuantity * (item.itemPrice - item.itemPrice * item.itemDiscount);
+            totalPrice += itemPrice;
             return (
                 <tr key={item.itemName + item.cartItemQuantity}>
                     <td><img src={item.itemImage} style={{maxHeight: "10vh"}}/></td>
@@ -80,7 +90,7 @@ const Cart = (props) => {
                             onInput={setQty}
                         />
                     </td>
-                    <td>${(item.cartItemQuantity * item.itemPrice).toFixed(2)}</td>
+                    <td>${itemPrice.toFixed(2)}</td>
                     <td>                        
                         <Button variant="danger">
                             Remove
@@ -113,29 +123,56 @@ const Cart = (props) => {
                         ${totalPrice.toFixed(2)}
                     </td>
                     <td>
-                        <Button variant="success" onClick={handleCheckout}>
-                            Payment
+                        <Button variant="primary" onClick={handleProceed}>
+                            Proceed
                         </Button>
                     </td>
                 </tr>
             </tbody>
         )
 
-        let table = (
-            <Table>
-                {tableHead}
-                {tableBody}
-            </Table>
+        let table = (<Table>{tableHead}{tableBody}</Table>)
+        
+        return (
+            <div>
+                <h1>Cart Information</h1>
+                {table}
+            </div>
+        );
+    }
+
+    const shipInformationForm = () => {
+        return (
+            <div>
+                <h1>Shipping Information</h1>
+                <ShippingForm setPaymentFormOpen={setPaymentFormOpen} setShipInformation={setShipInformation}/>
+            </div>
         )
-        return table;
+    }
+
+    const paymentInformationForm = () => {
+        return (
+            <div>
+                <h1>Payment Information</h1>
+                <div style={{display:"flex", justifyContent:"center", alignContent:"center"}}>
+                    <PaymentForm handlePayment={handlePayment}/>
+                </div>
+            </div>
+        )
     }
 
     return (
         <Container>
-        <div style={{marginTop: "2%"}}>
-            {cartItems.length === 0 && <div><h1>You Have No Item In Cart</h1></div>}
-            {cartItems.length > 0 && createCartItemTable()}
-        </div>
+            <div style={{marginTop: "2%"}}>
+                {cartItems.length === 0 && <div><h1>You Have No Item In Cart</h1></div>}
+                {cartItems.length > 0 && createCartItemTable()}
+                <div style={{marginTop: "3%"}}>
+                    {shipFormOpen === true && cartItems.length > 0 && shipInformationForm()}
+                </div>
+                <div style={{marginTop: "3%"}}>
+                    {paymentFormOpen === true && cartItems.length > 0 && paymentInformationForm()}
+                </div>
+            </div>
         </Container>
     )
 }
