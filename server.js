@@ -286,8 +286,9 @@ const queryAccountInformationPromise = (userCode) => {
 
 const queryAccountOrderPromise = (userCode) => {
     return new Promise(function (resolve,reject) {
-        const sql = 'SELECT * FROM USER_ORDER WHERE userCode = ? ORDER BY orderCode DESC'
-        pool.query(sql, [userCode], (error, result) => {
+        let queryValue = [userCode]
+        const sql = 'SELECT * FROM USER_ORDER WHERE userCode = ? ORDER BY orderCode DESC';
+        pool.query(sql, queryValue, (error, result) => {
             if (error) {
                 return reject(error);
             }
@@ -312,6 +313,7 @@ app.get('/account/:user?', (req,res) => {
         );
     })
     .catch(error => {
+        console.log(error);
         res.json({error: error});
     })
 
@@ -436,7 +438,19 @@ app.post('/api/register', (req,res) => {
     })
 })
 
-const queryOrderPromise = (orderID) => {
+const queryOrderPromise = (orderCode) => {
+    return new Promise((resolve,reject) => {
+        const sql = 'SELECT * FROM USER_ORDER WHERE orderCode LIKE ?';
+        pool.query(sql, [orderCode], (error, result) => {
+            if (error) {
+                return reject(error);
+            }
+            resolve(result);
+        })
+    })
+} 
+
+const queryOrderDetailPromise = (orderID) => {
     return new Promise(function(resolve,reject) {
         const sql = 'SELECT * FROM ORDER_ITEM JOIN ITEM ON ORDER_ITEM.itemCode = ITEM.itemCode WHERE orderCode = ?';
         pool.query(sql, [orderID], (error, result) => {
@@ -450,13 +464,24 @@ const queryOrderPromise = (orderID) => {
 
 app.get('/order', (req,res) => {
     const orderID = req.query.oid;
-    queryOrderPromise(orderID)
-    .then(result => {
-        res.json(result);
+    Promise.all(
+        [
+            queryOrderPromise(orderID),
+            queryOrderDetailPromise(orderID)
+        ]
+    )
+    .then(results => {
+        res.json({
+            order: results[0][0],
+            orderItems: results[1]
+        })
     })
-    .catch(error => {
-
-    });
+    .catch(dbError => {
+        console.log(dbError);
+        const error = new Error("Internal Server Error");
+        error.status = 500;
+        res.status(error.status).json({error: error.message})
+    })
 })
 
 const queryItemCartPromise = (userID, itemCode) => {
@@ -601,10 +626,10 @@ const createOrderCode = () => {
     return formattedDateTime;
 }
 
-const processPaymentPromise = (userCode, orderCode) => {
+const processPaymentPromise = (userCode, orderCode, name, email, address, city, state, pCode) => {
     return new Promise((resolve,reject) => {
-        let sql = "CALL proceed_payment(?, ?)";
-        let queryValue = [userCode, orderCode];
+        let sql = "CALL proceed_payment(?, ?, ?, ?, ?, ?, ?, ?)";
+        let queryValue = [userCode, orderCode, name, email, address, city, state, pCode];
         pool.query(sql, queryValue, (error, result) => {
             if (error) {
                 return reject(error);
@@ -616,20 +641,31 @@ const processPaymentPromise = (userCode, orderCode) => {
 
 app.post('/api/checkoutCart', (req,res) => {
     let body = req.body;
-    if (body === undefined) {
+    if (body === undefined || body.userCode === undefined) {
         return;
     }
 
     let userCode = body.userCode;
     let orderCode = createOrderCode();
+    let name = body.name;
+    let email = body.email;
+    let address = body.address;
+    let city = body.city;
+    let state = body.state;
+    let pCode = body.pCode;
 
-    let checkoutCart = processPaymentPromise(userCode, orderCode);
+    let checkoutCart = processPaymentPromise(userCode, orderCode, name, email, address, city, state, pCode);
     checkoutCart
     .then(result => {
         console.log(result);
         res.json({message: result});
     })
-    .catch(error => {console.log(error)})
+    .catch(dbError => {
+        console.log(dbError);
+        const error = new Error("Internal Server Error: Contact Admin");
+        error.status = 500;
+        res.status(error.status).json({error: error.message});
+    })
 })
 
 const queryAdminOrderPromise = (orderCode) => {
