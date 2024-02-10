@@ -56,18 +56,25 @@ const Cart = (props) => {
 
     const handlePayment = () => {
         console.log(shipInformation);
-        /*let checkoutCart = {
-            userCode: props.user
+        let checkoutCart = {
+            userCode: props.user,
+            name: shipInformation.name,
+            email: shipInformation.email,
+            address: shipInformation.address,
+            city: shipInformation.city,
+            state: shipInformation.state,
+            pCode: shipInformation.pCode
         }
 
         axios.post('/api/checkoutCart', checkoutCart)
         .then(result => {
-            console.log(result.data.message);
             setCartItem([]);
+            alert(result.data.message);
         })
         .catch(error => {
-            console.log(error);
-        })*/
+            console.error('Error:', error);
+            alert(error.response.data.error);
+        })
     } 
 
     const createCartItemTable = () => {

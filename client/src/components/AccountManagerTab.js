@@ -14,6 +14,8 @@ const AccountManagerTab = (props) => {
         axios.get(`/account/${props.user}`)
         .then(result => {
             let fetchedUser = result.data;
+            console.log(props.user);
+            console.log(fetchedUser);
             let fetchedUserInformation = fetchedUser.userInformation;
             let fetchedUserOrders = fetchedUser.userOrders;
             setUserInformation(
