@@ -7,6 +7,7 @@ import Button from "react-bootstrap/esm/Button";
 import { useDispatch } from "react-redux";
 import { setUserPrivilege } from "./redux/userSlice";
 import { useNavigate } from "react-router-dom";
+import AdminOrderDetail from "./adminComponents/AdminOrderDetail";
 
 const Admin = () => {
     const navigate = useNavigate();
@@ -28,6 +29,7 @@ const Admin = () => {
                     <Route index element={<AdminDashBoard/>}/>
                     <Route path="/" element={<AdminDashBoard/>}/>
                     <Route path="/aov" element={<AdminOrderView/>}/>
+                    <Route path="/aod" element={<AdminOrderDetail/>}/>
                 </Routes>
             </div>
         </Container>

@@ -52,7 +52,7 @@ const AdminOrderView = () => {
                     <div style={{border: "1px solid black", padding:"1%"}}>
                         <h1>Order Code: {item.orderCode}</h1>
                         <h2>Status: {orderStatus} </h2>
-                        <Link>View Detail</Link>
+                        <Link to={`/aod?oid=${item.orderCode}`}>View Detail</Link>
                     </div>
                 </Col>
             )
