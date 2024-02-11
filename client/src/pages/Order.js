@@ -19,7 +19,6 @@ const Order = () => {
             let resultData = results.data;
             let order = resultData.order;
             let orderItems = resultData.orderItems;
-            console.log(order);
             setOrder(order);
             setOrderItems(orderItems);
         })
@@ -109,13 +108,18 @@ const Order = () => {
     }
 
     return (
+        
             <Container>
-                <Row>
-                    <Col><h1>Order Number: {oid}</h1></Col>
-                    <Col><h1 style={{float:"right"}}>Order Status: {orderStatus()}</h1></Col>
-                </Row>
-                {shipInformationView()}
-                {createOrderItemTable()}
+                {oid && 
+                    <div>
+                        <Row>
+                            <Col><h1>Order Number: {oid}</h1></Col>
+                            <Col><h1 style={{float:"right"}}>Order Status: {orderStatus()}</h1></Col>
+                        </Row>
+                        {shipInformationView()}
+                        {createOrderItemTable()}
+                    </div>
+                }
             </Container>
     )
 }
