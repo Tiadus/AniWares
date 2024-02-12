@@ -1,3 +1,4 @@
+//This function create an order code based on the current server time
 const createOrderCode = () => {
     // Get the current date and time
     const currentDate = new Date();
@@ -16,6 +17,9 @@ const createOrderCode = () => {
     return formattedDateTime;
 }
 
+//This function process the payment of a user when a payment is made successfully on the front end.
+//It call the proceed_payment procedure stored in the database which insert a new order in USER_ORDER,
+//then move the item in the current user cart to ORDER_ITEM
 const processPaymentPromise = (userCode, orderCode, name, email, address, city, state, pCode, pool) => {
     return new Promise((resolve,reject) => {
         let sql = "CALL proceed_payment(?, ?, ?, ?, ?, ?, ?, ?)";

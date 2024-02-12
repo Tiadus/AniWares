@@ -1,3 +1,4 @@
+//The function is used for when an admin need to get all the current pending order in the system
 const queryAdminOrderPromise = (orderCode, pool) => {
     return new Promise((resolve, reject) => {
         let sql = 'SELECT * FROM USER_ORDER';
@@ -21,6 +22,7 @@ const queryAdminOrderPromise = (orderCode, pool) => {
     })
 }
 
+//The function is used for when an admin need to get the detailed of an order
 const queryAdminOrderDetailPromise = (orderID, pool) => {
     return new Promise(function(resolve,reject) {
         const sql = 'SELECT * FROM ORDER_ITEM JOIN ITEM ON ORDER_ITEM.itemCode = ITEM.itemCode WHERE orderCode = ?';
@@ -33,6 +35,7 @@ const queryAdminOrderDetailPromise = (orderID, pool) => {
     });
 }
 
+//The function is used for when an admin need to update the status of an order
 const updateAdminOrderPromise = (userCode, orderCode, orderStatus, pool) => {
     return new Promise((resolve, reject) => {
         let sql = 'UPDATE USER_ORDER SET orderStatus = ? WHERE userCode = ? AND orderCode = ?';

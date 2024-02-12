@@ -1,3 +1,4 @@
+//The function is used to insert an item into the cart
 const insertCartPromise = (userCode, itemCode, cartItemQuantity, pool) => {
     return new Promise((resolve,reject) => {
         const sql = "INSERT INTO USER_CART VALUES(?, ?, ?)";
@@ -12,6 +13,7 @@ const insertCartPromise = (userCode, itemCode, cartItemQuantity, pool) => {
     })
 }
 
+//The function is used to update the quantity of an item in the user cart
 const updateCartPromise = (userCode, itemCode, cartItemQuantity, pool) => {
     return new Promise((resolve,reject) => {
         const sql = "UPDATE USER_CART SET cartItemQuantity = ? WHERE userCode = ? AND itemCode = ?";

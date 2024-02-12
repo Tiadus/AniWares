@@ -1,3 +1,5 @@
+//The function is used to query the database for matching item based on the parameter.
+//It is also used to query the database for a list of filter based on the search value.
 const queryItemPromise = (search, itemBrand, itemCategory, itemType, itemScale, itemSeries, itemName, minPrice, maxPrice, discount, status, group, pool) => {
     return new Promise(function(resolve,reject) {
         let sql = `SELECT * FROM ITEM `;
@@ -86,6 +88,7 @@ const queryItemPromise = (search, itemBrand, itemCategory, itemType, itemScale, 
     });
 }
 
+//The function is used to filter out the request from the api which get the search value for item and its filter
 const getRequest = (req) => {
     let queryJSON = {
         search: `%${""}%`,

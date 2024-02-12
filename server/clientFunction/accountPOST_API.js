@@ -1,3 +1,4 @@
+//This function is called when the server need to insert or register a new user into the database
 const insertUserPromise = (userName, userEmail, userPassword, isAdmin, pool) => {
     return new Promise((resolve, reject) => {
         let userCode = 0;

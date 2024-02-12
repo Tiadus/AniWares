@@ -1,3 +1,4 @@
+//This function is used to get the current user cart and all the item in it to display on page Cart
 const queryItemCartPromise = (userID, pool) => {
     return new Promise(function(resolve,reject) {
         let queryValue = [];
@@ -13,6 +14,8 @@ const queryItemCartPromise = (userID, pool) => {
     });
 }
 
+//This function is used to check whether an item is currently in the user cart.
+//Used when the frontend need to check whether it should add the item to the cart or increment the quantity of the item in the cart by one
 const queryCartPromise = (userID, itemCode, pool) => {
     return new Promise((resolve, reject) => {
         let queryValue = [userID, itemCode]

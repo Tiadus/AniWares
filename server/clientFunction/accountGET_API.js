@@ -1,3 +1,4 @@
+//This function querry the database for a user based on the userCode, if no user return with reject
 const queryAccountInformationPromise = (userCode, pool) => {
     return new Promise(function (resolve,reject) {
         const sql = 'SELECT * FROM SHOP_USER WHERE userCode = ?';
@@ -15,6 +16,7 @@ const queryAccountInformationPromise = (userCode, pool) => {
     })
 }
 
+//This function query the database to get a list of orders of a user based on the userCode
 const queryAccountOrderPromise = (userCode, pool) => {
     return new Promise(function (resolve,reject) {
         let queryValue = [userCode]
@@ -29,6 +31,7 @@ const queryAccountOrderPromise = (userCode, pool) => {
     })
 }
 
+//This function query the database with the loginCredential and password, if there is a matched result this mean that the user exist and login proceeds
 const queryAccountLoginPromise = (loginCredential, password, pool) => {
     return new Promise ((resolve, reject) => {
         let queryValue = [loginCredential, password];
@@ -47,6 +50,7 @@ const queryAccountLoginPromise = (loginCredential, password, pool) => {
     })
 }
 
+//This function query the database to get the information based on userName. Used to check whether a userName exist in the database for register purpose
 const queryUserNamePromise = (userName, pool) => {
     return new Promise((resolve,reject) => {
         let queryValue = [userName];
@@ -60,6 +64,7 @@ const queryUserNamePromise = (userName, pool) => {
     })
 }
 
+//This function query the database to get the information based on userEmail. Used to check whether a user email exist in the database for register purpose
 const queryUserEmailPromise = (userEmail, pool) => {
     return new Promise((resolve,reject) => {
         let queryValue = [userEmail];
