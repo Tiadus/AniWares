@@ -7,10 +7,10 @@ export const userSlice = createSlice({
         isAdmin: 0
     },
     reducers: {
-        setUserCode: (state, action) => {
+        setUserCode: (state, action) => { //Function to set the userCode to distinguish between customer
             state.userCode = action.payload;
         },
-        setUserPrivilege: (state, action) => {
+        setUserPrivilege: (state, action) => { //Function to set the privilege of an user to determine if the admin mode should be turned on
             state.isAdmin = action.payload;
         }
     }

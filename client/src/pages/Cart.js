@@ -7,11 +7,13 @@ import PaymentForm from "../components/PaymentForm";
 import ShippingForm from "../components/ShippingForm";
 
 const Cart = (props) => {
+    //State of the component
     const [cartItems, setCartItem] = useState([]);
     const [shipFormOpen, setShipFormOpen] = useState(false);
     const [shipInformation, setShipInformation] = useState({})
     const [paymentFormOpen, setPaymentFormOpen] = useState(false);
 
+    //Function used to get the current cart of the user
     const getCartItem = () => {
         axios.get(`/cart/${props.user}`)
         .then(result => {
@@ -24,10 +26,11 @@ const Cart = (props) => {
         getCartItem();
     }, [])
 
+    //Used to reset the component every time contents of cart change
     useEffect(() => {
-        console.log(cartItems.length);
     }, [cartItems])
 
+    //Function used to update the quantity of item in the cart based on user input
     const setQty = (event) => {
         let target = event.target;
         let itemCode = target.name;
@@ -50,12 +53,13 @@ const Cart = (props) => {
         });
     }
 
+    //Upon finish checking the content of the cart, the user may proceed to enter ship information
     const handleProceed = () => {
         setShipFormOpen(true);
     }
 
+    //Function used to handle when the user want to make payment for current cart item
     const handlePayment = () => {
-        console.log(shipInformation);
         let checkoutCart = {
             userCode: props.user,
             name: shipInformation.name,
@@ -77,6 +81,7 @@ const Cart = (props) => {
         })
     } 
 
+    //Function used to create a table to list all the item in the cart
     const createCartItemTable = () => {
         let totalPrice = 0;
 
@@ -148,6 +153,7 @@ const Cart = (props) => {
         );
     }
 
+    //Function used to create shipping form
     const shipInformationForm = () => {
         return (
             <div>
@@ -157,6 +163,7 @@ const Cart = (props) => {
         )
     }
 
+    //Function used to create payment form
     const paymentInformationForm = () => {
         return (
             <div>

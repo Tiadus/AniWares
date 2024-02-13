@@ -1,9 +1,11 @@
+//Import
 import { useEffect } from "react";
 import AccountRegisterLogin from "./AccountRegisterLogin";
 import AccountManager from "./AccountManager";
 import Container from "react-bootstrap/esm/Container";
 
 const Account = (props) => {
+    //Used to update the page when a user login or logout
     useEffect(() => {
 
     }, [props.user]);

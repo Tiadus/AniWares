@@ -25,7 +25,7 @@ const AdminOrderDetail = () => {
             let orderItems = resultData.orderItems;
             let exceedStockItemCode = [];
             for (let i = 0; i < orderItems.length; i++) {
-                if (orderItems[i].orderItemQuantity < orderItems[i].orderItemPrice) {
+                if (orderItems[i].orderItemQuantity > orderItems[i].itemQuantity) {
                     exceedStockItemCode.push(orderItems[i].itemCode);
                 }
             }

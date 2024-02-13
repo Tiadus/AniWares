@@ -1,3 +1,4 @@
+//Import
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -7,12 +8,14 @@ import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
 
 const Order = () => {
+    //Hooks
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const oid = searchParams.get("oid");
     const [order, setOrder] = useState({})
     const [orderItems, setOrderItems] = useState([]);
 
+    //Get order detail based on orderCode
     useEffect(() => {
         axios.get(`/order?oid=${oid}`)
         .then(results => {
@@ -25,6 +28,7 @@ const Order = () => {
         .catch();
     }, []);
 
+    //Get the status in number and turn to readable format
     const orderStatus = () => {
         const status = order.orderStatus;
         let orderStatus;
@@ -44,6 +48,7 @@ const Order = () => {
         return orderStatus
     }
 
+    //Display ship information
     const shipInformationView = () => {
         return (
             <div>
@@ -57,6 +62,7 @@ const Order = () => {
         )
     }
 
+    //Display the items in the order
     const createOrderItemTable = () => {
         let total = 0
         let tableBodyData = orderItems.map(item => {

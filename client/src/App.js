@@ -5,8 +5,8 @@ import Shop from './Shop';
 import Admin from "./Admin";
 
 function App() {
-  const user = useSelector((state) => state.user.userCode);
-  const isAdmin = useSelector((state) => state.user.isAdmin);
+  const user = useSelector((state) => state.user.userCode); //Used to distinguishe between customers
+  const isAdmin = useSelector((state) => state.user.isAdmin); //Used to distinguishe between customer and admin
 
   return (
       <BrowserRouter>

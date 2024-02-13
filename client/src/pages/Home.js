@@ -17,6 +17,7 @@ const Home = () => {
         fetchHomeData();
     }, []);
 
+    //Function used to fetch the currently on discount item
     const fetchHomeData = async () => {
         let discountItemRequest = {
             params: {

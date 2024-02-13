@@ -6,6 +6,7 @@ import Container from "react-bootstrap/esm/Container";
 import { useNavigate } from 'react-router-dom';
 
 const Search = (props) => {
+    //Import Hook
     const navigate = useNavigate();
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
@@ -15,6 +16,7 @@ const Search = (props) => {
         }
     );
 
+    //Get parameters from url
     const query = searchParams.get('query');
     const brand = searchParams.getAll('brand');
     const category = searchParams.getAll('category');
@@ -30,6 +32,7 @@ const Search = (props) => {
         fetchSearchData();
     }, [location]);
 
+    //Fetch the data based on search value from the url
     const fetchSearchData = async () => {
         let search = query;
         if (search === null) {
@@ -118,6 +121,7 @@ const Search = (props) => {
         })
     };
 
+    //Handle when the user choose a value to filter
     const filterChangeHandler = (event) => {
         let target = event.target;
         let value = target.value;
